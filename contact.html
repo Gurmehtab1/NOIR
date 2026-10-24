@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>NOIR | Contact & Test Drive</title><link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet"><link rel="stylesheet" href="style.css"></head><body><div class="loader" id="site-loader" aria-label="NOIR loading experience">
+    <div class="loader-vignette" aria-hidden="true"></div>
+    <div class="loader-upper">
+      <div class="loader-mark" aria-label="NOIR"><span>N</span><span>O</span><span>I</span><span>R</span></div>
+    </div>
+    <div class="loader-divider" aria-hidden="true"></div>
+    
+    <div class="loader-progress">
+      <div class="loader-progress-line"><span></span></div>
+      <div class="loader-progress-meta">
+        <span>ENGINEERING THE EXTRAORDINARY</span>
+        <strong id="loader-percent">0%</strong>
+      </div>
+    </div>
+  </div>
+<header class="navbar"><a class="logo" href="index.html">NOIR</a><div class="nav-actions"><a class="login-link" href="login.html">Login</a><a class="test-drive-btn" href="contact.html">Book Test Drive</a><button class="menu-btn" aria-label="Open menu" aria-expanded="false"><i class="ri-menu-4-line"></i></button></div></header><div class="menu-overlay" id="menu-overlay"><div class="menu-head"><span>NOIR / MENU</span><button class="menu-close" aria-label="Close menu"><i class="ri-close-line"></i></button></div><nav class="menu-panel"><a href="index.html"><span>01</span> Home</a><a href="models.html"><span>02</span> Models</a><a href="about.html"><span>03</span> About</a><a href="compare.html"><span>04</span> Compare</a><a href="gallery.html"><span>05</span> Gallery</a><a href="news.html"><span>06</span> Automotive News</a><a href="faq.html"><span>07</span> FAQ</a><a class="active" href="contact.html"><span>08</span> Test Drive</a><a href="login.html"><span>09</span> Login / Sign Up</a></nav></div><main><section class="page-hero"><span class="eyebrow dark">TEST DRIVE</span><h1>Make the<br><em>appointment.</em></h1><p>Tell us how you'd like to experience NOIR and our concierge will take it from there.</p></section><section class="contact-page section-shell"><div class="contact-intro"><span class="eyebrow dark">NOIR CONCIERGE</span><h2>A machine is better understood from the driver's seat.</h2><p>Choose your preferred model, date and details. The form is ready for the booking flow already used by the project.</p><div class="contact-points"><span><i class="ri-map-pin-line"></i> Private showroom experience</span><span><i class="ri-time-line"></i> Flexible appointment windows</span><span><i class="ri-customer-service-2-line"></i> Dedicated concierge</span></div></div><form class="contact-form" id="contact-form"><input type="text" name="name" placeholder="Full Name" required><input type="email" name="email" placeholder="Email Address" required><input type="tel" name="phone" placeholder="Phone Number" required><select name="model" required><option value="">Select a model</option><option>Porsche 911</option><option>Rolls Royce</option><option>LaFerrari</option><option>Bugatti Tourbillon</option></select><input type="date" name="date" id="preferred-date" required><textarea name="message" placeholder="Anything you'd like us to prepare?" rows="5"></textarea><button type="submit" class="btn btn-primary">Book Test Drive <i class="ri-arrow-right-line"></i></button><p class="form-success" id="form-success">Thanks. Your request has been received. We'll reach out shortly to confirm your test drive.</p></form></section></main><footer class="footer"><div><a class="logo" href="index.html">NOIR</a><p>Crafted with precision. Designed for performance.</p></div><div class="footer-links"><a href="models.html">Models</a><a href="about.html">About</a><a href="compare.html">Compare</a><a href="gallery.html">Gallery</a><a href="news.html">News</a><a href="faq.html">FAQ</a><a href="login.html">Account</a></div><p class="copyright">© 2026 NOIR Automotive. All Rights Reserved.</p></footer><script src="main.js"></script>
+<script>
+
+const GOOGLE_SHEETS_URL =
+"https://script.google.com/macros/s/AKfycbwuWKVMUizNFnKBR50FCaAuhYcyo82sinsnSlJu_NWFI5tqLFFQvUaQyFUej2v2EGWS1w/exec";
+
+const form = document.getElementById("contact-form");
+const success = document.getElementById("form-success");
+
+form.addEventListener("submit", async function(e) {
+
+    e.preventDefault();
+
+    const data = {
+        name: form.elements["name"].value,
+        email: form.elements["email"].value,
+        phone: form.elements["phone"].value,
+        model: form.elements["model"].value,
+        date: form.elements["date"].value,
+        time: "",
+        location: "",
+        status: "Confirmed"
+    };
+
+    try {
+
+        const response = await fetch(
+            GOOGLE_SHEETS_URL,
+            {
+                method: "POST",
+                body: new URLSearchParams({
+                    data: JSON.stringify(data)
+                })
+            }
+        );
+
+        const result = await response.json();
+
+        if (result.success) {
+
+            success.textContent =
+                "Booking confirmed! Your Booking ID is " +
+                result.bookingId;
+
+            success.classList.add("visible");
+
+            form.reset();
+
+        } else {
+
+            throw new Error(result.error);
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        success.textContent =
+            "Booking could not be submitted. Please try again.";
+
+        success.classList.add("visible");
+
+    }
+
+});
+
+</script>
+<script src="enhancements.js" defer></script></body></html>

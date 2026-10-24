@@ -1,0 +1,13 @@
+{
+  "name": "noir-automotive-news",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NOIR automotive website with a server-side GNews proxy",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
